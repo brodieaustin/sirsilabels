@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <div class="label-sheet">
+    {% for result in results.data %}
+      <div class="label" contenteditable>
+        <span class="category">{{ result.category }}</span>
+        <span class="number">{{ result.number }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
