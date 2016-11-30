@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block body %}
+  <p class="instructions">Click on a label to edit. Or print if the labels are ready to go.</p>
   <div class="label-sheet">
-    {% for result in results.data %}
+    {% for label in session.labels %}
       <div class="label" contenteditable>
-        <span class="category">{{ result.category }}</span>
-        <span class="number">{{ result.number }}</span>
+        <span class="category">{{ label.category }}</span>
+        <span class="number">{{ label.number }}</span>
       </div>
     {% endfor %}
   </div>

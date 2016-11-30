@@ -19,6 +19,30 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
+def parse_file(file):
+    lines = file.readlines()
+
+    #initialize dictionary for results
+    results = [];
+    r = 0
+
+    #loop through results and pass into results dictionary
+    for i in range(0, len(lines)):
+        l = lines[i].strip().replace('/', '')
+
+        if l != '.folddata' and len(l) > 1:
+
+            if i % 2:
+                results.append({})
+                results[r]['number'] = l
+
+            else:
+                results[r]['category'] = l
+                r += 1
+
+    return results
+
+
 #routing and views
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -34,37 +58,18 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('make_labels',
-                                    filename=filename))
+            #read lines into array
+            session['labels'] = parse_file(file)
+
+            return redirect(url_for('view_labels'))
 
     return render_template('upload.html')
 
-@app.route('/labels/<filename>')
-def make_labels(filename):
-    #open file to parse
-    with open(os.path.join(UPLOAD_FOLDER, filename)) as f:
+@app.route('/labels/')
+def view_labels():
+    if session.get('labels'):
+        return render_template('labels.html')
 
-        #read lines into array
-        lines = f.readlines()
-
-        #initialize dictionary for results
-        results = {'data': []};
-        r = 0
-
-        #loop through results and pass into results dictionary
-        for i in range(0, len(lines)):
-            l = lines[i].strip().replace('/', '')
-
-            if l != '.folddata' and len(l) > 1:
-
-                if i % 2:
-                    results['data'].append({})
-                    results['data'][r]['number'] = l
-
-                else:
-                    results['data'][r]['category'] = l
-                    r += 1
-
-    return render_template('labels.html', results=results)
+    else:
+        flash('Upload a file to view labels')
+        return redirect(url_for('upload_file'))
