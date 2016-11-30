@@ -8,7 +8,6 @@ ALLOWED_EXTENSIONS = set(['txt'])
 
 #initialize app
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #secret key is secret
 app.secret_key = secrets.SECRET_KEY
