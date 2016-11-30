@@ -9,4 +9,4 @@ build
 *.egg-info
 
 /venv/
-/app/media/
+secrets.py

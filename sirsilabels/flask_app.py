@@ -1,9 +1,9 @@
 import os
 from flask import Flask, flash, session, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import secrets
 
 #configs
-UPLOAD_FOLDER = './media/uploads'
 ALLOWED_EXTENSIONS = set(['txt'])
 
 #initialize app
@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #secret key is secret
-app.secret_key = 'EoCwMDIq44AN#MasYV5U7@ig'
+app.secret_key = secrets.SECRET_KEY
 
 #helper functions
 def allowed_file(filename):
@@ -73,3 +73,6 @@ def view_labels():
     else:
         flash('Upload a file to view labels')
         return redirect(url_for('upload_file'))
+
+if __name__ == '__main__':
+    app.run()
