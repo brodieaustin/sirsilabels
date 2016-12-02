@@ -111,13 +111,14 @@
 
     .label{
       position: relative;
+      display: table;
       width: calc(33.333% - 20px);
       height: 97px;
       margin: 1px 10px;
       padding: 1rem;
       background: white;
-      font-family: 'Helvetica Neue', 'Arial', sans-serif;
-      font-weight: 700;
+      font-family: 'Helvetica Neue', 'Arial Black', sans-serif;
+      font-weight: 900;
       cursor: pointer;
     }
 
@@ -129,6 +130,11 @@
       left: 0;
       display: block;
       content:'\270E';
+    }
+
+    .label-text{
+      display: table-cell;
+      vertical-align: middle;
     }
 
     .instructions{
@@ -170,7 +176,7 @@
       @page { size:8.5in 11in; margin: .75cm 0cm }
 
       header, .instructions, .back{
-        display: none;
+        display: none !important;
       }
 
       .label-sheet{
@@ -180,7 +186,7 @@
 
       .label{
         margin: 0 10px 1px;
-        font-size: 14pt;
+        font-size: 12pt;
         page-break-inside: avoid;
         break-inside: avoid;
       }
