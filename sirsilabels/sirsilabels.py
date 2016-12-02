@@ -35,6 +35,9 @@ def parse_file(file):
         if len(line) > 0:
             print (line)
 
+            #need to group stuff, then split on comma
+            #need to look for dewey numbers and put cutter on next line
+
             if ',' in line:
                 line = line.replace(',', ', ')
 
@@ -44,6 +47,7 @@ def parse_file(file):
                 results[r]['item'] = ''
 
             elif len(line_before) > 0 and len(line_after) > 0:
+                #add exceptions for JUV
                 if line == 'FICTION':
                         results[r]['category'] += ' ' + line
 
