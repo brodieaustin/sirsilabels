@@ -26,17 +26,32 @@ def parse_file(file):
     r = 0
 
     #loop through results and pass into results dictionary
-    for i in range(0, len(lines)):
-        l = lines[i].strip().replace('/', '')
 
-        if l != '.folddata' and len(l) > 1:
+    for i in range(1, (len(lines)-1)):
+        line = lines[i].strip().replace('/', '')
+        line_before = lines[i-1].strip().replace('/', '')
+        line_after = lines[i+1].strip().replace('/', '')
 
-            if i % 2:
+        if len(line) > 0:
+            print (line)
+
+            if ',' in line:
+                line = line.replace(',', ', ')
+
+            if len(line_before) == 0 or line_before == '.folddata':
                 results.append({})
-                results[r]['number'] = l
+                results[r]['category'] = line
+                results[r]['item'] = ''
+
+            elif len(line_before) > 0 and len(line_after) > 0:
+                if line == 'FICTION':
+                        results[r]['category'] += ' ' + line
+
+                else:
+                        results[r]['item'] += line
 
             else:
-                results[r]['category'] = l
+                results[r]['item'] += line
                 r += 1
 
     return results
@@ -46,6 +61,7 @@ def parse_file(file):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        session.clear()
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file in the request')
@@ -59,6 +75,9 @@ def upload_file():
         if file and allowed_file(file.filename):
             #read lines into array
             session['labels'] = parse_file(file)
+
+            if request.form['offset']:
+                session['offset'] = request.form['offset']
 
             return redirect(url_for('view_labels'))
 

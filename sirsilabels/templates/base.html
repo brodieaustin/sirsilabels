@@ -2,7 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Labels</title>
+  <meta name="viewport" content="width=device-width">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,400i" rel="stylesheet">
   <style>
     *{
@@ -35,16 +37,28 @@
 
     main{
       position: relative;
-      width: 70%;
-      max-width: 64rem;
+      width: 96%;
       margin: auto;
     }
 
+    @media screen and (min-width: 45rem){
+      main{
+        width: 60%;
+        max-width: 64rem;
+      }
+    }
+
     .form{
-      width: 60%;
+      width: 100%;
       margin: 0 auto;
       padding: 4rem;
       background: #fff;
+    }
+
+    @media screen and (min-width: 45rem){
+      .form{
+        width: 70%;
+      }
     }
 
     .form *{
@@ -57,6 +71,7 @@
 
     label{
       display: block;
+      margin-bottom: .5rem;
       color: #888;
       font-size: .875rem;
       text-transform: uppercase;
@@ -65,8 +80,15 @@
 
     input[type=file]{
       width: 100%;
-      padding: 1rem 0 .5rem;
+      padding: .5rem 0;
       border-bottom: 1px solid #ddd;
+      font-size: 1rem;
+    }
+
+    input[type=text]{
+      width: auto;
+      padding: .5rem;
+      border: 1px solid #ddd;
       font-size: 1rem;
     }
 
@@ -92,9 +114,10 @@
       width: calc(33.333% - 20px);
       height: 97px;
       margin: 1px 10px;
-      padding: 10px;
+      padding: 1rem;
       background: white;
-      font-size: 110%;
+      font-family: 'Helvetica Neue', 'Arial', sans-serif;
+      font-weight: 700;
       cursor: pointer;
     }
 
@@ -109,12 +132,24 @@
     }
 
     .instructions{
-      margin: 2rem 1rem 0;
+      margin: 1rem 1rem 2rem;
       font-style: italic;
     }
 
     .number, .category{
       display: block;
+    }
+
+    .back{
+      display: block;
+      margin: 1rem 1rem 0;
+      font-size: .875rem;
+      color: #888;
+      text-decoration: none;
+    }
+
+    .back:before{
+      content: 	"\2190";
     }
 
     .flashes{
@@ -148,7 +183,6 @@
         font-size: 14pt;
         page-break-inside: avoid;
         break-inside: avoid;
-        border: 1px solid #eee;
       }
     }
   </style>
