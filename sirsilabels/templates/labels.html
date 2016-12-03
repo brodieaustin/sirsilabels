@@ -4,16 +4,16 @@
   <a href="/" class="back">Go back</a>
   <p class="instructions">Click on a label to edit. Or print if the labels are ready to go.</p>
   <div class="label-sheet">
-    {% if session.offset %}
-      {% for i in range(session.offset|int) %}
+    {% if offset is not none %}
+      {% for i in range(offset|int) %}
         <div class="label" contenteditable></div>
       {% endfor %}
     {% endif %}
-    {% for label in session.labels %}
+    {% for label in labels %}
       <div class="label" contenteditable>
         <div class="label-text">
           <span class="category">{{ label.category }}</span>
-          <span class="number">{{ label.item }}</span>
+          <span class="number">{{ label.item|replace(',', ',<br>')|safe }}</span>
         </div>
       </div>
     {% endfor %}

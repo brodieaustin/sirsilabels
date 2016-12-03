@@ -26,29 +26,30 @@ def parse_file(file):
     r = 0
 
     #loop through results and pass into results dictionary
+    for i in range(1, len(lines)):
 
-    for i in range(1, (len(lines)-1)):
+        #for each line get line, prev line, and and next line
         line = lines[i].strip().replace('/', '')
-        line_before = lines[i-1].strip().replace('/', '')
-        line_after = lines[i+1].strip().replace('/', '')
+        prev_line = lines[i-1].strip().replace('/', '')
+
+        #make sure there is a next line before trying to capture it
+        if i < (len(lines)-1) :
+            next_line = lines[i+1].strip().replace('/', '')
+        else:
+            next_line = ''
 
         if len(line) > 0:
-            print (line)
 
-            #need to group stuff, then split on comma
-            #need to look for dewey numbers and put cutter on next line
-
-            if ',' in line:
-                line = line.replace(',', ', ')
-
-            if len(line_before) == 0 or line_before == '.folddata':
+            #if the first line capture it as a category
+            if len(prev_line) == 0 or prev_line == '.folddata':
                 results.append({})
                 results[r]['category'] = line
                 results[r]['item'] = ''
 
-            elif len(line_before) > 0 and len(line_after) > 0:
-                #add exceptions for JUV
+            elif len(prev_line) > 0 and len(next_line) > 0:
+                #Add line to previous line if current line is Fiction and previous is Science
                 if line == 'FICTION':
+                    if prev_line == 'SCIENCE':
                         results[r]['category'] += ' ' + line
 
                 else:
@@ -62,35 +63,39 @@ def parse_file(file):
 
 
 #routing and views
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def upload_file():
+    return render_template('upload.html')
+
+@app.route('/labels/', methods=['GET', 'POST'])
+def view_labels(offset=None):
     if request.method == 'POST':
-        session.clear()
+
         # check if the post request has the file part
         if 'file' not in request.files:
             flash('No file in the request')
-            return redirect(request.url)
+            return redirect(url_for('upload_labels'))
+
         file = request.files['file']
+
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            return redirect(url_for('upload_labels'))
+
         if file and allowed_file(file.filename):
             #read lines into array
-            session['labels'] = parse_file(file)
+            labels = parse_file(file)
 
             if request.form['offset']:
-                session['offset'] = request.form['offset']
+                print request.form['offset']
+                offset = request.form['offset']
+            else:
+                offset = None
 
-            return redirect(url_for('view_labels'))
+            return render_template('labels.html', labels=labels, offset=offset)
 
-    return render_template('upload.html')
-
-@app.route('/labels/')
-def view_labels():
-    if session.get('labels'):
-        return render_template('labels.html')
 
     else:
         flash('Upload a file to view labels')
