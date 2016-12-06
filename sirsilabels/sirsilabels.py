@@ -17,7 +17,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-
+# don't make call number and cutter on same line with juv non-fiction
 def parse_file(file):
     lines = file.readlines()
 
