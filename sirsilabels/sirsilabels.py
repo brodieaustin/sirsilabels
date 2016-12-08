@@ -1,4 +1,4 @@
-import os
+import os, re
 from flask import Flask, flash, session, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import secrets
@@ -19,6 +19,10 @@ def allowed_file(filename):
 
 # don't make call number and cutter on same line with juv non-fiction
 def parse_file(file):
+    #compile regex for finding deweys
+    p = re.compile('\d{3}')
+
+    #read the file into lines
     lines = file.readlines()
 
     #initialize dictionary for results
@@ -52,8 +56,16 @@ def parse_file(file):
                     if prev_line == 'SCIENCE':
                         results[r]['category'] += ' ' + line
 
+                #check if line is a dewey
+                elif p.match(line):
+                    results[r]['dewey'] = line
+
+                #check if line is rando comma, the strip and add
+                elif line == ',':
+                    results[r]['item'] = results[r]['item'].rstrip() + line
+
                 else:
-                        results[r]['item'] += line
+                    results[r]['item'] += line + ' '
 
             else:
                 results[r]['item'] += line

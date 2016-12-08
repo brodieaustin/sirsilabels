@@ -13,7 +13,10 @@
       <div class="label" contenteditable>
         <div class="label-text">
           <span class="category">{{ label.category }}</span>
-          <span class="number">{{ label.item|replace(',', ',<br>')|safe }}</span>
+          {% if label.dewey %}
+            <span class="dewey">{{ label.dewey }}</span>
+          {% endif %}
+          <span class="item">{{ label.item|replace(',', ',<br>')|safe }}</span>
         </div>
       </div>
     {% endfor %}
